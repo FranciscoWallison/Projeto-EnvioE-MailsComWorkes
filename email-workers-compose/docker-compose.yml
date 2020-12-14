@@ -1,6 +1,15 @@
 version: '3' # versão mais atual
+volumes: 
+  dados:
 services: 
   db: 
     image: postgres:9.6
+    volumes:
+      # Volume dos dados
+      - dados:/var/lib/postgresql/data
+      # Scripts
+      - ./scripts:/scripts
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    # Obrigatorio definir senha
     environment:
       - POSTGRES_PASSWORD=postgres
