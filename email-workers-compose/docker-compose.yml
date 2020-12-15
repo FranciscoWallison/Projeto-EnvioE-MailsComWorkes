@@ -17,7 +17,7 @@ services:
     # Obrigatorio definir senha
     environment:
       - POSTGRES_PASSWORD=postgres
-    networks: 
+    networks:
       - banco
   frontend:
     image: nginx:1.13
@@ -47,18 +47,20 @@ services:
     depends_on: 
       - db
       - queue
+    environment:
+      - DB_NAME=teste
   queue:
     image: redis:3.2
     networks: 
       - fila
   worker:
-    image: python:3.6    
+    build: worker    
     volumes: 
       # Worker
       - ./worker:/worker
     working_dir: /worker
-    command: bash ./app.sh
+    command: worker.py
     networks: 
       - fila
     depends_on:
-      -  queue
+      - queue
